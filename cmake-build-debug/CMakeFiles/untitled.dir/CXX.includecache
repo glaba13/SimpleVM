@@ -1,0 +1,38 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/Users/Guri/Desktop/proj/RandBulbs/FileParser.h
+iostream
+-
+random
+-
+iterator
+-
+ctime
+-
+type_traits
+-
+cassert
+-
+fstream
+-
+sstream
+-
+map
+-
+
+C:/Users/Guri/Desktop/proj/RandBulbs/Utils.h
+string
+-
+
+C:/Users/Guri/Desktop/proj/RandBulbs/main.cpp
+FileParser.h
+C:/Users/Guri/Desktop/proj/RandBulbs/FileParser.h
+Utils.h
+C:/Users/Guri/Desktop/proj/RandBulbs/Utils.h
+
