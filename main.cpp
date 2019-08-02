@@ -1,19 +1,54 @@
 #include "FileParser.h"
 #include "Utils.h"
+#include "VirtualMachine.h"
 
 using namespace std;
 
 
+// Defines for arguments
+#define HELP            "-h"
+#define VERBOUS         "-v"
 //global flags
 bool verbous = false;
 
 
 void Process(char *string);
 
+
+/*
+ * Print the helper standart text
+ */
+void PrintHelpText() {
+    cout << " This is a simple VM ." << endl;
+    cout << " The  synopsys of command is:" << endl;
+    cout << " \t \t ./VM  path/to/file_name [-v |  -h ]" << endl;
+    cout << " \t \t The flags are:" << endl;
+    cout << " \t \t \t -v: verbouse, details output for each stage" << endl;
+    cout << " \t \t \t -h: help instructions" << endl;
+}
+
+
 /*
  * Main function
  */
 int main(int argc, char *argv[]) {
+
+    //check for filename
+    if (argc < 2) {
+        cout << " Please specify filename as argument:./VM  path/to/file_name" << endl;
+        return 0;
+    }
+
+    //check for additional options
+    for (int i = 1; i < argc; ++i) {
+        string arg = string(argv[i]);
+        if (arg == HELP) {
+            PrintHelpText();
+        }
+        if (arg == VERBOUS) {
+            verbous = true;
+        }
+    }
 
     try {
         Process(argv[1]);
@@ -25,68 +60,11 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 
-
-void f( unsigned int v, unsigned int*data, unsigned int & sp ) {
-    sp = sp - 1;
-    data[sp] = v;
-}
-
-unsigned int g(  unsigned int * data, unsigned int & sp ) {
-    unsigned int v = data[sp];
-    sp = sp + 1;
-    return v;
-}
-
-
-
+/*
+ * Process and runs one time the machine
+ */
 void Process(char *filename) {
-    FileParser fp(string(filename), true);
-    unsigned int data_size = fp.GetNextByte();
-    unsigned int image_size = fp.GetNextByte();
-
-    auto * data = new unsigned int[data_size];
-    for (int i = 0; i < image_size; ++i) {
-        data[i] =  fp.GetNextByte();
-    }
-    unsigned int  ip = 0;
-    unsigned int  sp = data_size;
-
-    unsigned char operation;
-    unsigned char optional_data;
-    unsigned int inst = 0;
-
-    while(true) {
-        inst = data[ip];
-        ip = ip + 1;
-        operation = (inst >> 16) & 0xFF;
-        optional_data = inst & 0xFF;
-        switch (operation) {
-            case 0: {
-                f((unsigned int) optional_data, data, sp);
-
-            }
-                break;
-            case 1: {
-                unsigned int a = g(data, sp);
-                unsigned int b = g(data, sp);
-                f(a + b, data, sp);
-            }
-                break;
-            case 2: {
-                unsigned char c = g(data, sp) & 0xff;
-                cout << c;
-            }
-                break;
-            case 3: {
-                sp = sp + 1;
-
-            }
-                break;
-            case 4: {
-                return;
-            }
-                break;
-        }
-    }
-
+    FileParser fp(string(filename), verbous);
+    VirtualMachine vm(&fp, verbous);
+    vm.Run();
 }

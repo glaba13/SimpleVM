@@ -1,6 +1,3 @@
-//
-// Created by glaba on 7/26/2019.
-//
 
 
 #include <iostream>
@@ -20,18 +17,25 @@ using namespace std;
 class FileParser {
 
 public:
-
     /**
     * File Parser Constructor
     * @param filename read and parse the file and throuws exteption if error occurs
     * @param verbous verous mode
     */
     FileParser(string filename, bool verbous);
-
-    unsigned int GetNextByte();
+    /**
+     * GetNextByte function takes the next word from the stream and returns it
+     * @return
+     */
+    unsigned int GetNextWord();
 
 private:
     ifstream infile;
+    bool verbous;
+    /**
+     * Verify that stream is fine
+     * @param istringstream
+     */
     void verify(istringstream &istringstream);
 };
 

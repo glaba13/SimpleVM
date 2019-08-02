@@ -3,4 +3,4 @@ project(untitled)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(untitled main.cpp FileParser.cpp FileParser.h Utils.cpp Utils.h)
+add_executable(untitled main.cpp FileParser.cpp FileParser.h Utils.cpp Utils.h VirtualMachine.cpp VirtualMachine.h)

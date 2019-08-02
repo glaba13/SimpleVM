@@ -1,17 +1,16 @@
-//
-// Created by glaba on 7/26/2019.
-//
 
 #ifndef UNTITLED_UTILS_H
 #define UNTITLED_UTILS_H
 
-#include <string>
-
 using namespace std;
 namespace Utils {
-
-    // Returns formatted string for the name for bash
-    int GetFormattedString(string color);
+    /**
+     * GetByte function which returns byte on specific num postions
+     * @param val : input value
+     * @param num : index of the byte requested
+     * @return  : single result byte
+     */
+    unsigned char GetByte(unsigned int val, int num);
 };
 
 

@@ -1,18 +1,7 @@
-//
-// Created by glaba on 7/26/2019.
-//
-
 #include "FileParser.h"
-
 #include <iostream>
-#include <random>
-#include <iterator>
-#include <ctime>
-#include <type_traits>
-#include <cassert>
-#include <fstream>
-#include <sstream>
 #include <map>
+#include <bitset>
 
 using namespace std;
 
@@ -26,8 +15,8 @@ FileParser::FileParser(string filename, bool verbous) {
     if (!infile.good())
         throw std::runtime_error("Could not open file");
 
-    if(verbous) cout<<"File opened successfuly"<<endl;
-
+    if (verbous) cout << "File opened successfuly" << endl;
+    this->verbous = verbous;
 
 }
 
@@ -37,8 +26,9 @@ void FileParser::verify(istringstream &istringstream) {
         throw std::runtime_error("Wrong file format");
     }
 }
-//returns total available number of bulb
-unsigned int FileParser::GetNextByte() {
+
+//returns next word from the stream
+unsigned int FileParser::GetNextWord() {
     string line;
     if (!std::getline(infile, line)) {
         throw std::runtime_error("Wrong file format");
@@ -54,7 +44,11 @@ unsigned int FileParser::GetNextByte() {
     if (ss.fail()) {
         throw std::runtime_error("Wrong file format");
     }
+    if (verbous) {
+        std::string binary = std::bitset<32>(x).to_string(); //to binary
 
+        cout << "Read byte: " << x << " b: " << binary << endl;
+    }
     return x;
 
 }

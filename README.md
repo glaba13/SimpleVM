@@ -1,64 +1,44 @@
-# Randomized Bulb Color  Simulator
+# Simple Virtual Machine
 
-The program simulates the random color choose from the file provided.
+The program simulates machine instruction execution and output the processed file/
 
 **Note**: the exe file is located in __release_exe__ folder
 
 The command general structure is:
 ```sh
-$ ./bulbColorRandomizer path/to/file_name  [-v | -c | -h | -ex | -ex[N]]
+$ ./VM  path/to/file_name [-v |  -h ]
 ```
 
 As it can be seen it takes file as main argument and optional flags, which are :
-  - **-v** : Verbous mode, where all the steps are printed in details, suitable when more infor is nessesery or need be seen all steps
-  - **-c** : Colorized output mode, where the output characters are presented in color for better visualisation
-  - **-ex**  Extended simulation to determine the expected number of unique colours in this scenario (N=1000)
-  - **-ex[N]**  Extended simulation with specifing number. _example: -ex7000_
+  - **-v** : Verbous mode, where all the steps are printed in details, suitable when more information is nessesery or need be seen all steps
   - **-h** : help instructions, *can be called without filename
 
 
 ## Architecture
-The solution consists of two classes, Utility function and main module.
+The solution consists of two main classes, Utility function and main module.
 
-The parser class parses the file and stores results as color names, numbers and random selected number. 
-
+The parser class parses the file and stores results read word (32 bits) when it is requested.
 If file doesn't exist or there is an error in file format, it throws an descriptive xtention which is hendeled and logged externally.
-Note: that there is a  _STRICT_CHECK_ Compiler flag, which controls the how strict is format checked. Even if color is twise in the file it is combined and doesn't affect to output.
 
-![Architecture_struct](https://raw.githubusercontent.com/glaba13/ImageResources/master/structs.PNG)
 
-The RadomSelector class simulates and randomizes the solution and have two main functions:
-1) for standart randomize which gives number of unique color selected, it uses piecewise_constant_distribution which get the bulbs according to the distribution and numbers as weight provided.
-2) Extended mode for determition of the average output of the simulation
+![Architecture_struct](https://raw.githubusercontent.com/glaba13/ImageResources/master/1.PNG)
 
-Utility namespace contains static mapper of color name to color code and main module integrates everything together and operates according to the flag modes.
+the VirualMachine class
+1) initilise data and fills it in constructior
+2) fetches, decodes and executes the instruction until termination in run function
+3) release the dynamiclya llocated memory in destructor
+
+Utility namespace contains helper functions which one of them is accesing the byte depending on the postion, binary conversion and etc.
 
 ## Specification
-The solution is implemented with C++ and using Clion IDE
+The solution is implemented with C++ and using Clion IDE on Windows
+Using MingGW-w64 version 5.0 toolchain.
+
 
 ## Outputs
-The standad output the program shows how many number is chosed from each color.
-the number of start and __i/M__ is shown for each color where M number of rrandomly select bulbs from file (!not the number of each available color!)
-![Standart Output](https://raw.githubusercontent.com/glaba13/ImageResources/master/1.PNG)
+The output for cvi.bin is in output.txt
+
+if the programm is run in verbous mode (-v) it prins all steps for deatailed analyse which is shown below as an example:
 
 
-
-The colorized and verbous output shows the simulation by colors which are presented and predefined in the map:
-![img](https://raw.githubusercontent.com/glaba13/ImageResources/master/5.PNG)
-
-
-Extended mode in verbous shows each step and samples of randomisation, **which is fun**:
-![img](https://raw.githubusercontent.com/glaba13/ImageResources/master/3.png)
-
-Another example for the file input:
-
-![img](https://raw.githubusercontent.com/glaba13/ImageResources/master/sfile.PNG)
-
-![img](https://raw.githubusercontent.com/glaba13/ImageResources/master/ezgif-1-e386dc3227ac.gif)
-
-
-### Timeline
-
-- The basic requred function was quite easy and implemented in ~1 hour,as it can be seen from the commit.
-- Additinal time was spent for the cleaner and better structural code, documentation, additinal features and testing for edge cases.
 
