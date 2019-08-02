@@ -33,12 +33,12 @@ Utility namespace contains helper functions which one of them is accesing the by
 ## Specification
 The solution is implemented with C++ and using Clion IDE on Windows
 Using MingGW-w64 version 5.0 toolchain.
-
+CMakeList is included.
 
 ## Outputs
 The output for cvi.bin is in output.txt
 
 if the programm is run in verbous mode (-v) it prins all steps for deatailed analyse which is shown below as an example:
 
-
+![Output_Ex](https://raw.githubusercontent.com/glaba13/ImageResources/master/2.PNG)
 

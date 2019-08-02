@@ -1,0 +1,117 @@
+Congratulations Gvarami!
+
+if you are reading this then you have successfully used your
+VM implementation to execute the program which displays this message. Or, at
+least figured out how to decode this directly from the program image.
+
+Either way, please include this output text in your submission zip-file in
+a file named result.txt.
+
+2df 28e 1e5 1c8 123 ec 47
+
+Task2 -- Median Filter
+
+The code below loads a Bitmap file, updates the image data and saves it into a
+new Bitmap file. The goal of this task is not only to implement a median filter but also refactoring
+this code to a proper object oriented design.
+Those are the restriction for the Bitmap files:
+**The file format should be 24bit.
+**The image dimensions should be even numbers.
+
+-----CODE STARTS--------------
+#include <iostream>
+#include <fstream>
+
+using namespace std;
+
+int main(int argCount, char* argValue[])
+{
+        //Checking the expect number of parameters
+   if (argCount < 2)
+   {
+     cout << "No Parameter";
+     return -1;
+   }
+
+   //Initializing input and output files
+   fstream ifile(argValue[1], ios_base::in | ios_base::binary);
+   if (!ifile.is_open())
+   {
+         cout << "Error opening input file\n";
+     return -1;
+   }
+   fstream ofile("outputfile.bmp", ios_base::out | ios_base::binary);
+   if (!ofile.is_open())
+   {
+     cout << "Error creating output file\n";
+     return -1;
+   }
+
+    //Reading the main header (always 14 bytes)
+        unsigned char headerData[14];
+        ifile.seekg(0);
+        ifile.read((char*)headerData,14);
+        unsigned int fileSize = *(int*)&headerData[2];
+        unsigned int offset = *(int*)&headerData[10];
+
+        //Reading image header (only the first twelve bytes -- header size, image width and image height)
+        unsigned char imageheaderData[12];
+        ifile.read((char*)imageheaderData,12);
+        unsigned int width = *(int*)&imageheaderData[4];
+        unsigned int height = *(int*)&imageheaderData[8];
+
+        //Validating the main header against image header information
+   unsigned int pixelDataSize = fileSize - offset;
+   if (pixelDataSize != width*height*3)
+   {
+           cout << "This file is not a 24bit Bitmap file\n";
+           return -1;
+   }
+   //Reading input data into two sections: pixel and non-pixel related data
+   unsigned char* nonPixelData = new unsigned char[offset];
+   ifile.seekg(0);
+   ifile.read((char*)nonPixelData,offset);
+   unsigned char* pixelData = new unsigned char[pixelDataSize];
+   ifile.read((char*)pixelData,pixelDataSize);
+   ifile.close();
+
+   //Applying filter to the data.
+   //In this example no filter is applied instead, a red border is drawn).
+   //Remove/change the code below in order to apply the required filter
+   //Indices are distributed from the lower left to the upper right corner
+   unsigned int rowSize = width*3;
+   unsigned int jCount = pixelDataSize / rowSize;
+   unsigned int iCount = pixelDataSize / jCount;
+   for(unsigned int j =0; j<jCount;j++)
+   {
+                for(unsigned int i =0; i<iCount;i+=3)
+           {
+                   unsigned int index = j*iCount + i;
+                   unsigned char blue = pixelData[index];
+                   unsigned char green = pixelData[index+1];
+                   unsigned char red = pixelData[index+2];
+                   if( (i == 0) || (i==iCount -3) || (j == 0) || (j==jCount-1))
+                   {
+                           blue = 0;
+                           green = 0;
+                           red = 255;
+                   }
+                   pixelData[index] = blue;
+                   pixelData[index+1] = green;
+                   pixelData[index+2] = red;
+           }
+   }
+
+   //Writing both sections into the output file
+   ofile.seekg(0);
+   ofile.write((char*)nonPixelData,offset);
+   ofile.write((char*)pixelData,pixelDataSize);
+   ofile.close();
+
+   //Releasing remaining allocated resources
+   delete[] nonPixelData;
+   delete[] pixelData;
+
+   return 0;
+}
+-----CODE ENDS--------------
